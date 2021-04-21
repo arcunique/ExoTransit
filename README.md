@@ -6,12 +6,16 @@ ExoTransit
 
 ExoTransit is a Python package for retrieval of the properties of an exoplanet by modeling its transit light curves 
 using Markov chain Monte Carlo technique
-on the basis of the transit model of Eric & Agol (2002). The code also allows simultaneous modeling of correlated noise
-with Gaussian process (GP) regression. The code also allows users to detrend the light curves simultaneously by choosing
-arbitrary detrending variables and trend functions. 
+on the basis of the transit model of [Mandel & Agol (2002)](https://ui.adsabs.harvard.edu/abs/2002ApJ...580L.171M%2F/abstract)
+and their [transit light curve routines](https://www.lpl.arizona.edu/~ianc/python/transit.html). This package also 
+allows users to simultaneous model the correlated noise with Gaussian process (GP) regression as well as detrend the 
+light curves by choosing arbitrary trend functions and arguments. 
 
-One of the greatest fetaure of the code is that it has option for monitoring the progress of walkers over iterations.
-Also users can set the program to stop automatically by calculating the auto-correlation time.
+One of the greatest features of the package is real-time visualization of the retrieval process by monitoring the progress
+of walkers, dynamic corner plots, and auto-correlation time of the samples over the iterations. This allows users to 
+control the process manually or opt for automatic completion by choosing a convergence criterion, or the maximum number
+of iterations.
+
 
 Author
 ------
