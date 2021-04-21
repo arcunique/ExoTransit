@@ -97,7 +97,6 @@ class model_transit_lightcurve(object):
     def add_detrend_param(self, variable=0, name='', dataindex=-1, coeff=[], bounds=[], fixed=[]):
         if type(variable)==int:
             varnames = ['t','flux','err']
-            # var = self.__getattribute__(varnames[variable])[self.dataindex[dataindex]]
             if self.Ndata==1 and dataindex in [0,-1]:
                 var = self.data[variable]
             elif self.Ndata>1: var = self.data[dataindex][variable]
@@ -127,7 +126,6 @@ class model_transit_lightcurve(object):
             for j,icarr in enumerate(self.index_param_common):
                 if not self.group_indiv[0] or not self.group_common[j] or self.group_indiv[0]==self.group_common[j]:
                     nparam.update(zip(self.param_name[icarr],param[icarr]))
-            # print(nparam)
             return nparam
         paramseg = [NamedParam() for _ in self.index_param_indiv]
         for i,iiarr in enumerate(self.index_param_indiv):
@@ -142,20 +140,6 @@ class model_transit_lightcurve(object):
         if detrend:
             return direct_tfm_with_detrend(param,t,self.per,self.detrendvar,self.ldmethod)
         return direct_tfm(param,t,self.per,self.ldmethod)
-
-    # @staticmethod
-    # def _contains_gppar(param):
-    #     if isinstance(param,(dict,NamedParam)):
-    #         # gpa = param.pop('gpa',None)
-    #         # gptau = param.pop('gptau',None)
-    #         # return gpa is not None and gptau is not None
-    #         return 'gpa' in param and 'gptau' in param
-    #     cond = []
-    #     for par in param:
-    #         gpa = par.pop('gpa', None)
-    #         gptau = par.pop('gptau', None)
-    #         cond.append(gpa is not None and gptau is not None)
-    #     return cond
 
     @staticmethod
     def _contains_gppar(param):
@@ -246,7 +230,7 @@ class model_transit_lightcurve(object):
             if self.group_common[i]: groupexp[self.index_param_common[i]] = self.group_common[i]
         return list(map(''.join, zip(self.param_name,groupexp)))
 
-    def saveall(self, retrieval_skeleton='', params_mcmc='', mcmc_params_rawsample='', results_optimized='', **kwargs): # TODO:
+    def saveall(self, retrieval_skeleton='', params_mcmc='', mcmc_params_rawsample='', results_optimized='', **kwargs):
         import pickle as pkl
         if retrieval_skeleton: pkl.dump(self.skeleton, open(retrieval_skeleton+'.pkl','wb'))
         if params_mcmc:
@@ -349,9 +333,6 @@ class model_transit_lightcurve(object):
             e.append(ei)
         return t,f,e
 
-
-
-
     @property
     def median_err_params_mcmc(self):
         return get_median_error_from_distribution(self.params_mcmc, sigma=1, method='percentile', saveas='')
@@ -389,20 +370,9 @@ class model_transit_lightcurve(object):
                 axes.append(ax)
             else:
                 ax = axes[i]
-            # params[:, 1] = params[:, 0] + params[:, 1]
-            # params[:, 2] = params[:, 0] - params[:, 2]
             midfluxfit = self.get_transit_model(params[i][:,0],t[i],detrend=False,denoiseGP=False)
-            # extremefluxfit1 = self.get_transit_model(params[:,1],t,detrend=False,denoiseGP=False)
-            # extremefluxfit2 = self.get_transit_model(params[:,2],t,detrend=False,denoiseGP=False)
-            # params = np.transpose([mesh.ravel() for mesh in np.meshgrid(*params[:, :3])])
-            # for par in params[np.random.choice(np.arange(params.shape[0]),20),:]:
-            #     if not any([np.array_equal(par, params[:, col]) for col in range(params.shape[1])]):
-            #         fluxfit = self.get_transit_model(par,t,detrend=False,denoiseGP=False)
-            #         ax.plot(t, fluxfit, c='c', lw='1', )
             ax.errorbar(t[i], f[i], e[i], fmt='.')
             ax.plot(t[i], midfluxfit, c='r', lw=3, label='Model corr. to median of parameters')
-            # ax.plot(t, extremefluxfit1, c='m', lw=3, label='Model corr. to median+1-$\sigma$ of parameters')
-            # ax.plot(t, extremefluxfit2, c='g', lw=3, label='Model corr. to median-1-$\sigma$ of parameters')
         return figure,axes
 
 
